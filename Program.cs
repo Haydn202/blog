@@ -1,7 +1,17 @@
+using blog.Data;
+using Microsoft.EntityFrameworkCore;
+
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(configuration.GetSection("ConnectionString").Value));
 
 var app = builder.Build();
 

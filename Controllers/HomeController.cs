@@ -22,6 +22,23 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    public IActionResult Post()
+    {
+        return View();
+    }
+    
+    [HttpGet]
+    public IActionResult Edit()
+    {
+        return View(new ArticleInfo());
+    }
+    
+    [HttpPost]
+    public IActionResult Edit(ArticleInfo articleInfo)
+    {
+        return RedirectToAction("Index");
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
