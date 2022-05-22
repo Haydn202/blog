@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using blog.Data;
+using blog.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using blog.Models;
 
@@ -7,15 +9,20 @@ namespace blog.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly AppDbContext _dbContext;
+    private readonly IRepository _repo;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, AppDbContext dbContext, IRepository repo)
     {
         _logger = logger;
+        _dbContext = dbContext;
+        _repo = repo;
     }
 
     public IActionResult Index()
     {
-        return View();
+        var articles = _repo.GetAllArticlesAsync();
+        return View(articles.Result);
     }
 
     public IActionResult Privacy()
@@ -23,21 +30,40 @@ public class HomeController : Controller
         return View();
     }
     
-    public IActionResult Post()
+    public IActionResult Article(int id)
     {
-        return View();
+        var article = _repo.GetArticleAsync(id);
+        return View(article.Result);
     }
     
     [HttpGet]
-    public IActionResult Edit()
+    public IActionResult Edit(int? id)
     {
-        return View(new ArticleInfo());
+        if(id == null)
+            return View(new Article());
+        else
+        {
+            var article = _repo.GetArticleAsync((int) id);
+            return View(article.Result);
+        }
+        
     }
     
     [HttpPost]
-    public IActionResult Edit(ArticleInfo articleInfo)
+    public async Task<IActionResult> Edit(Article article)
     {
-        return RedirectToAction("Index");
+        if (article.ArticleId > 0)
+            _repo.UpdateArticle(article);
+        else
+            _repo.AddArticle(article);
+        
+        if(await _repo.SaveChangesAsync())
+            return RedirectToAction("Index");
+        else
+        {
+            return View(article);
+        }
+        
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,4 +1,5 @@
 using blog.Data;
+using blog.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -12,6 +13,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(configuration.GetSection("ConnectionString").Value));
+
+builder.Services.AddTransient<IRepository, Repository>();
 
 var app = builder.Build();
 
