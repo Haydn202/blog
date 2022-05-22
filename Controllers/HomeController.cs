@@ -66,6 +66,14 @@ public class HomeController : Controller
         
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Remove(int id)
+    {
+        _repo.RemoveArticle(id);
+        await _repo.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
