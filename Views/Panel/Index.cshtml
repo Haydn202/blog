@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model IEnumerable<Article>
+
+<div class="text-center">
+    <h1 class="display-4">Admin Panel</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div>
+    <ul>
+        @foreach (var article in Model)
+        {
+            <li>
+                @article.Title
+                -
+                <a asp-controller="Panel" asp-action="Edit" asp-route-id="@article.ArticleId">
+                    Edit
+                </a>
+                -
+                <a asp-controller="Panel" asp-action="Remove" asp-route-id="@article.ArticleId">
+                    Remove
+                </a>
+            </li>
+        }
+    </ul>
+</div>

@@ -36,44 +36,6 @@ public class HomeController : Controller
         return View(article.Result);
     }
     
-    [HttpGet]
-    public IActionResult Edit(int? id)
-    {
-        if(id == null)
-            return View(new Article());
-        else
-        {
-            var article = _repo.GetArticleAsync((int) id);
-            return View(article.Result);
-        }
-        
-    }
-    
-    [HttpPost]
-    public async Task<IActionResult> Edit(Article article)
-    {
-        if (article.ArticleId > 0)
-            _repo.UpdateArticle(article);
-        else
-            _repo.AddArticle(article);
-        
-        if(await _repo.SaveChangesAsync())
-            return RedirectToAction("Index");
-        else
-        {
-            return View(article);
-        }
-        
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Remove(int id)
-    {
-        _repo.RemoveArticle(id);
-        await _repo.SaveChangesAsync();
-        return RedirectToAction("Index");
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

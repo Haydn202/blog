@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddTransient<IRepository, Repository>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {
         // test settings
         // TODO update requirements.
@@ -26,8 +26,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
         options.Password.RequireUppercase = false;
         options.Password.RequireNonAlphanumeric = false;
     })
-    .AddRoles<IdentityRole>()
+    // .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";
+});
 
 var app = builder.Build();
 
