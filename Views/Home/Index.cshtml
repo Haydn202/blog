@@ -9,17 +9,24 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-<img src="~/content/static/code-editoren-t.jpg" width="500px" />
+<img src="~/content/static/code-editoren-t.jpg" width="500px" alt=""/>
 
-<div>
-    <ul>
-        @foreach (var article in Model)
-        {
-            <li>
-                <a asp-controller="Home" asp-action="Article" asp-route-id="@article.ArticleId">
-                    @article.Title
-                </a>
-            </li>
-        }
-    </ul>
+<div class="card-deck">
+    @foreach (var article in Model)
+    {
+        <div class="card border-primary h-100 mb-4" style="max-width: 18rem; display:inline-block;">
+                @if (!String.IsNullOrEmpty(article.ThumbnailUrl))
+                {
+                    var imagePath = $"/Image/{@article.ThumbnailUrl}";
+                    <img class="card-img-top" src="@imagePath" alt="Card image cap">
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@article.Title</h5>
+                    <p class="card-text">@article.Description</p>
+                    <a asp-controller="Home" asp-action="Article" asp-route-id="@article.ArticleId" class="btn btn-primary">
+                        Read
+                    </a>
+                </div>
+            </div>
+    }
 </div>
