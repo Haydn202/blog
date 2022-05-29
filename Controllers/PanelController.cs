@@ -1,6 +1,9 @@
-﻿using blog.Data;
+﻿using AutoMapper;
+using blog.Data;
+using blog.Data.Filemanager;
 using blog.Data.Repository;
 using blog.Models;
+using blog.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +15,16 @@ public class PanelController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly AppDbContext _dbContext;
     private readonly IRepository _repo;
-    
-    public PanelController(ILogger<HomeController> logger, AppDbContext dbContext, IRepository repo)
+    private readonly IMapper _mapper;
+    private readonly IFileManager _fileManager;
+
+    public PanelController(ILogger<HomeController> logger, AppDbContext dbContext, IRepository repo, IFileManager fileManager,IMapper mapper)
     {
         _logger = logger;
         _dbContext = dbContext;
         _repo = repo;
+        _mapper = mapper;
+        _fileManager = fileManager;
     }
     
     public IActionResult Index()
@@ -30,17 +37,20 @@ public class PanelController : Controller
     public IActionResult Edit(int? id)
     {
         if(id == null)
-            return View(new Article());
+            return View(new ArticleViewModel());
         else
         {
-            var article = _repo.GetArticleAsync((int) id);
-            return View(article.Result);
+            var article = _repo.GetArticleAsync((int) id).Result;
+            return View(_mapper.Map<ArticleViewModel>(article));
         }
     }
     
     [HttpPost]
-    public async Task<IActionResult> Edit(Article article)
+    public async Task<IActionResult> Edit(ArticleViewModel articleVM)
     {
+        var article = _mapper.Map<Article>(articleVM);
+        article.ThumbnailUrl = await _fileManager.SaveImage(articleVM.Thumbnail);
+        
         if (article.ArticleId > 0)
             _repo.UpdateArticle(article);
         else
@@ -50,7 +60,7 @@ public class PanelController : Controller
             return RedirectToAction("Index");
         else
         {
-            return View(article);
+            return View(_mapper.Map<ArticleViewModel>(article));
         }
     }
 

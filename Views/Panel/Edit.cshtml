@@ -1,4 +1,4 @@
-﻿@model Article
+﻿@model ArticleViewModel
 
 @{
     Layout = null;
@@ -12,7 +12,7 @@
 </head>
 <body>
 <div>
-    <form asp-controller="Panel" asp-action="Edit" method="post">
+    <form asp-controller="Panel" asp-action="Edit" method="post" enctype="multipart/form-data">
         <input asp-for="ArticleId" type="hidden"/>
         <div>
             <label>Title</label>
@@ -29,6 +29,10 @@
         <div>
             <label>Topics</label>
             <input asp-for="Topics"/>
+        </div>
+        <div>
+            <label>Thumbnail</label>
+            <input asp-for="Thumbnail"/>
         </div>
         <input type="submit" value="Submit"/>
     </form>

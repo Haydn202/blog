@@ -1,4 +1,5 @@
 using blog.Data;
+using blog.Data.Filemanager;
 using blog.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(configuration.GetSection("ConnectionString").Value));
 
+builder.Services.AddTransient<IFileManager, FileManager>();
+
 builder.Services.AddTransient<IRepository, Repository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {

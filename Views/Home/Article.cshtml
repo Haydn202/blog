@@ -5,5 +5,9 @@
 }
 
 <h1>@Model.Title</h1>
-<img src="@Model.ThumbnailUrl" alt="Image">
+@if (!String.IsNullOrEmpty(Model.ThumbnailUrl))
+{
+    var imagePath = $"/Image/{Model.ThumbnailUrl}";
+    <img src="@imagePath" alt="Image" width="500px">
+}
 <p>@Model.Content</p>
