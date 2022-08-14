@@ -1,16 +1,10 @@
 ﻿@model ArticleViewModel
 
 @{
-    Layout = null;
+
 }
+<link href="~/lib/Trumbowyg-main/dist/ui/trumbowyg.css" rel="stylesheet" />
 
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <title>title</title>
-</head>
-<body>
 <div>
     <form asp-controller="Panel" asp-action="Edit" method="post" enctype="multipart/form-data">
         <input asp-for="ArticleId" type="hidden"/>
@@ -34,8 +28,18 @@
             <label>Thumbnail</label>
             <input asp-for="Thumbnail"/>
         </div>
+        <div>
+            <label>Content</label>
+            <textarea id="editor" asp-for="Content"></textarea>
+        </div>
         <input type="submit" value="Submit"/>
     </form>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/lib/Trumbowyg-main/dist/trumbowyg.js"></script>
+    <script>
+        $('#editor').trumbowyg();
+    </script>
+}

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/blog.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/Trumbowyg-main/dist/ui/trumbowyg.min.css"/>
 </head>
 <body>
 <header>
@@ -53,7 +54,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Panel" asp-action="Index">Admin panel</a>
                         </li>
                     }
-
                 </ul>
             </div>
         </div>
@@ -74,5 +74,10 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+
+<!-- Import Trumbowyg -->
+<script src="trumbowyg/dist/trumbowyg.min.js"></script>
 </body>
 </html>

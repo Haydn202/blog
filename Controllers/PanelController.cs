@@ -51,6 +51,7 @@ public class PanelController : Controller
         var article = _mapper.Map<Article>(articleVM);
         article.ThumbnailUrl = await _fileManager.SaveImage(articleVM.Thumbnail);
         
+        
         if (article.ArticleId > 0)
             _repo.UpdateArticle(article);
         else
