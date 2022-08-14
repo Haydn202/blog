@@ -26,7 +26,6 @@
 <div class="row mb-2">
     @foreach (var article in Model)
     {
-
         <div class="col-md-6">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
@@ -45,7 +44,6 @@
                         <img class="bd-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" preserveAspectRatio="xMidYMid slice" focusable="false" alt="" src="@imagePath">
                     </div>
                 }
-               
             </div>
         </div>
     }
@@ -53,7 +51,7 @@
 
 @functions {
 
-    public Article? LatestArticle(IEnumerable<Article> articles)
+    private Article? LatestArticle(IEnumerable<Article> articles)
     {
         return Model.OrderBy(x => x?.WrittenOn).FirstOrDefault();
     }

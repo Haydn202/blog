@@ -4,10 +4,10 @@
 
 }
 
-<h1>@Model.Title</h1>
-@if (!String.IsNullOrEmpty(Model.ThumbnailUrl))
-{
-    var imagePath = $"/Image/{Model.ThumbnailUrl}";
-    <img src="@imagePath" alt="Image" width="500px">
-}
+<span><h1>@Model.Title</h1></span>
+
+<p class="lead">
+  @Model.Description
+</p>
+
 <p>@Model.Content</p>
