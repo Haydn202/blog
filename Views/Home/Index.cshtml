@@ -5,28 +5,56 @@
 @model List<Article?>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 p-4 p-md-5 mb-4">CodeCloud</h1>
 </div>
 
-<img src="~/content/static/code-editoren-t.jpg" width="500px" alt=""/>
+<div class="text-center">
+    <h1 class="display-4">Latest</h1>
+</div>
 
-<div class="card-deck">
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    @{
+        var latest = LatestArticle(Model);
+    }
+    <div class="col-md-6 px-0">
+        <h1 class="display-4 fst-italic">@latest.Title</h1>
+        <p class="lead my-3">@latest.Description</p>
+        <p class="lead mb-0"><a class="text-white-50 fw-bold" asp-controller="Home" asp-action="Article" asp-route-id="@latest.ArticleId">Continue reading...</a></p>
+    </div>
+</div>
+
+<div class="row mb-2">
     @foreach (var article in Model)
     {
-        <div class="card border-primary h-100 mb-4" style="max-width: 18rem; display:inline-block;">
+
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">@article.Topics</strong>
+                    <h3 class="mb-0">@article.Title</h3>
+                    <div class="mb-1 text-muted">@article.WrittenOn</div>
+                    <p class="card-text mb-auto">@article.Description</p>
+                    <p class="lead mb-0"><a class="text-black-50 fw-bold" asp-controller="Home" asp-action="Article" asp-route-id="@article.ArticleId">Continue reading...</a></p>
+                </div>
+               
                 @if (!String.IsNullOrEmpty(article.ThumbnailUrl))
                 {
                     var imagePath = $"/Image/{@article.ThumbnailUrl}";
-                    <img class="card-img-top" src="@imagePath" alt="Card image cap">
+                    <div class="col-auto d-none d-lg-block">
+
+                        <img class="bd-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" preserveAspectRatio="xMidYMid slice" focusable="false" alt="" src="@imagePath">
+                    </div>
                 }
-                <div class="card-body">
-                    <h5 class="card-title">@article.Title</h5>
-                    <p class="card-text">@article.Description</p>
-                    <a asp-controller="Home" asp-action="Article" asp-route-id="@article.ArticleId" class="btn btn-primary">
-                        Read
-                    </a>
-                </div>
+               
             </div>
+        </div>
     }
 </div>
+
+@functions {
+
+    public Article? LatestArticle(IEnumerable<Article> articles)
+    {
+        return Model.OrderBy(x => x?.WrittenOn).FirstOrDefault();
+    }
+}
