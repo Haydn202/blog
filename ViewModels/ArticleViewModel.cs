@@ -10,4 +10,5 @@ public class ArticleViewModel
     public string Topics { get; set; } = "";
     public DateTime WrittenOn { get; set; } = DateTime.Now;
     public string Content { get; set; } = "";
+    public string? CurrentThumbnail { get; set; }
 }

@@ -41,7 +41,17 @@ public class PanelController : Controller
         else
         {
             var article = _repo.GetArticleAsync((int) id).Result;
-            return View(_mapper.Map<ArticleViewModel>(article));
+            return View(new ArticleViewModel()
+            {
+                ArticleId = article.ArticleId,
+                Title = article.Title,
+                Author = article.Author,
+                Description = article.Description,
+                CurrentThumbnail = article.ThumbnailUrl,
+                Topics = article.Topics,
+                WrittenOn = article.WrittenOn,
+                Content = article.Content
+            });
         }
     }
     
@@ -50,8 +60,7 @@ public class PanelController : Controller
     {
         var article = _mapper.Map<Article>(articleVM);
         article.ThumbnailUrl = await _fileManager.SaveImage(articleVM.Thumbnail);
-        
-        
+
         if (article.ArticleId > 0)
             _repo.UpdateArticle(article);
         else
