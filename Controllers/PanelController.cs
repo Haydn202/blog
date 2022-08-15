@@ -50,7 +50,8 @@ public class PanelController : Controller
                 CurrentThumbnail = article.ThumbnailUrl,
                 Topics = article.Topics,
                 WrittenOn = article.WrittenOn,
-                Content = article.Content
+                Content = article.Content,
+                Tags = article.Tags
             });
         }
     }

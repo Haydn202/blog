@@ -22,9 +22,9 @@ public class HomeController : Controller
         _repo = repo;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string topic)
     {
-        var articles = _repo.GetAllArticlesAsync();
+        var articles = string.IsNullOrEmpty(topic) ? _repo.GetAllArticlesAsync() : _repo.GetAllArticlesAsync(topic);
         return View(articles.Result);
     }
 

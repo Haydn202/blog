@@ -24,6 +24,11 @@ public class Repository : IRepository
     {
         return await _context.Articles.ToListAsync();
     }
+    
+    public async Task<List<Article?>> GetAllArticlesAsync(string topic)
+    {
+        return await _context.Articles.Where(a => a.Topics.ToLower().Contains(topic.ToLower())).ToListAsync();
+    }
 
     public void AddArticle(Article? article)
     {

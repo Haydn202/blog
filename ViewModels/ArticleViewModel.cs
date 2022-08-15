@@ -11,4 +11,5 @@ public class ArticleViewModel
     public DateTime WrittenOn { get; set; } = DateTime.Now;
     public string Content { get; set; } = "";
     public string? CurrentThumbnail { get; set; }
+    public string Tags { get; set; } = "";
 }

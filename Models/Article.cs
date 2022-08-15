@@ -9,6 +9,7 @@ public class Article
     public string ThumbnailUrl { get; set; } =
         "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/640px-SpongeBob_SquarePants_character.svg.png";
     public string Topics { get; set; }
+    public string Tags { get; set; } = "";
     public DateTime WrittenOn { get; set; } = DateTime.Now;
     public string Content { get; set; } = "Im an article";
 }

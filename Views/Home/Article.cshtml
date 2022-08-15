@@ -1,6 +1,9 @@
 @model Article
 
 @{
+    ViewBag.Title = Model.Title;
+    ViewBag.Description = Model.Description;
+    ViewBag.Keywords = $"{Model.Tags} {Model.Topics}";
 }
 
 @Html.Raw(Model.Content);
