@@ -1,4 +1,6 @@
-﻿namespace blog.Models;
+﻿using blog.Models.Comments;
+
+namespace blog.Models;
 
 public class Article
 {
@@ -12,4 +14,5 @@ public class Article
     public string Tags { get; set; } = "";
     public DateTime WrittenOn { get; set; } = DateTime.Now;
     public string Content { get; set; } = "Im an article";
+    public List<MainComment>? Comments { get; set; }
 }

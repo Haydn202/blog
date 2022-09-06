@@ -86,6 +86,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseDeveloperExceptionPage();
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
