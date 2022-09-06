@@ -22,23 +22,20 @@ public class HomeController : Controller
         _repo = repo;
     }
 
-    public IActionResult Index(string topic)
-    {
-        var articles = string.IsNullOrEmpty(topic) ? _repo.GetAllArticlesAsync() : _repo.GetAllArticlesAsync(topic);
-        return View(articles.Result);
-    }
+    public IActionResult Index(string topic) =>
+        View(String.IsNullOrEmpty(topic) ? 
+            _repo.GetAllArticlesAsync() : 
+            _repo.GetAllArticlesAsync(topic));
+
 
     public IActionResult Privacy()
     {
         return View();
     }
-    
-    public IActionResult Article(int id)
-    {
-        var article = _repo.GetArticleAsync(id);
-        return View(article.Result);
-    }
-    
+
+    public IActionResult Article(int id) => 
+        View(_repo.GetArticleAsync(id).Result);
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
@@ -46,9 +43,7 @@ public class HomeController : Controller
     }
     
     [HttpGet("/Image/{image}")]
-    public IActionResult Image(string image)
-    {
-        var fileType = image.Substring(image.LastIndexOf('.') + 1);
-        return new FileStreamResult(_fileManager.ImageStream(image), $"image/{fileType}");
-    }
+    public IActionResult Image(string image) =>
+        new FileStreamResult(_fileManager.ImageStream(image), 
+            $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
 }
