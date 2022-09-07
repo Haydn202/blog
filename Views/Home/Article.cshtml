@@ -5,5 +5,35 @@
     ViewBag.Description = Model.Description;
     ViewBag.Keywords = $"{Model.Tags} {Model.Topics}";
 }
+<div class="container">
+    <div class="article">
+    </div>
+    <div class="content">
+        @Html.Raw(Model.Content)
+    </div>
+    <div class="comment-section">
+        @{ 
+            await Html.RenderPartialAsync("Comment", new CommentViewModel {ArticleId = Model.ArticleId, MainCommentId = 0});
+        }
+        @foreach (var comment in Model.Comments)
+        {
+            <p>
+                @comment.Message --- @comment.Created
+            </p>
+            <div style="margin-left: 20px">
+                <h4>Replies</h4>
+                @{ 
+                    await Html.RenderPartialAsync("Comment", new CommentViewModel {ArticleId = Model.ArticleId, MainCommentId = comment.Id});
+                }
+                @foreach (var reply in comment.SubComments)
+                {
+                    <p>
+                        @reply.Message --- @reply.Created
+                    </p>
+                }
+            </div>
+        }
+    </div>
+    
+</div>
 
-@Html.Raw(Model.Content);

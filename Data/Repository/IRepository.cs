@@ -1,4 +1,5 @@
 ﻿using blog.Models;
+using blog.Models.Comments;
 
 namespace blog.Data.Repository;
 
@@ -12,4 +13,7 @@ public interface IRepository
     void UpdateArticle(Article article);
 
     Task<bool> SaveChangesAsync();
+    void AddSubComment(SubComment comment);
+    void AddMainComment(MainComment comment);
+    
 }

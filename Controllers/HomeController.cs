@@ -5,6 +5,7 @@ using blog.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using blog.Models;
 using blog.Models.Comments;
+using blog.ViewModels;
 
 namespace blog.Controllers;
 
@@ -50,5 +51,36 @@ public class HomeController : Controller
     {
         var fileType = image.Substring(image.LastIndexOf('.') + 1);
         return new FileStreamResult(_fileManager.ImageStream(image), $"image/{fileType}");
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Comment(CommentViewModel cvm)
+    {
+        if (!ModelState.IsValid)
+            return RedirectToAction("Article", new { id = cvm.ArticleId});
+
+        if (cvm.MainCommentId == 0)
+        {
+            var comment = new MainComment()
+            {
+                ArticleId = cvm.ArticleId,
+                Message = cvm.Message,
+                Created = DateTime.Now
+            };
+            _repo.AddMainComment(comment);
+        }
+        else
+        {
+            var comment = new SubComment
+            {
+                MainCommentId = cvm.MainCommentId,
+                Message = cvm.Message,
+                Created = DateTime.Now
+            };
+            _repo.AddSubComment(comment);
+        }
+        await _repo.SaveChangesAsync();
+
+        return RedirectToAction("Article", new { id = cvm.ArticleId});
     }
 }

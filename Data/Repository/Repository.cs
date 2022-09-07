@@ -1,4 +1,5 @@
 ﻿using blog.Models;
+using blog.Models.Comments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,10 @@ public class Repository : IRepository
 
     public async Task<Article?> GetArticleAsync(int id)
     {
-        return await _context.Articles.FirstOrDefaultAsync(a => a.ArticleId.Equals(id));
+        return await _context.Articles
+            .Include(a => a.Comments)
+            .ThenInclude(a => a.SubComments)
+            .FirstOrDefaultAsync(a => a.ArticleId.Equals(id));
     }
 
     public async Task<List<Article?>> GetAllArticlesAsync()
@@ -52,5 +56,15 @@ public class Repository : IRepository
             return true;
         }
         return false;
+    }
+
+    public void AddMainComment(MainComment comment)
+    {
+        _context.MainComments.Add(comment);
+    }
+    
+    public void AddSubComment(SubComment comment)
+    {
+        _context.SubComment.Add(comment);
     }
 }
