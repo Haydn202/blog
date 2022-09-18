@@ -24,10 +24,16 @@ public class HomeController : Controller
         _repo = repo;
     }
 
-    public IActionResult Index(string topic)
+    public IActionResult Index(int pageNumber, string topic)
     {
-        var articles = string.IsNullOrEmpty(topic) ? _repo.GetAllArticlesAsync() : _repo.GetAllArticlesAsync(topic);
-        return View(articles.Result);
+        if (pageNumber < 1)
+        {
+            return RedirectToAction("Index", new {pageNumber = 1, topic});
+        }
+        
+        var viewModel = _repo.GetAllArticlesAsync(topic, pageNumber).Result;
+        
+        return View(viewModel);
     }
 
     public IActionResult Privacy()

@@ -1,5 +1,7 @@
-﻿using blog.Models;
+﻿using System.Globalization;
+using blog.Models;
 using blog.Models.Comments;
+using blog.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -23,15 +25,74 @@ public class Repository : IRepository
             .ThenInclude(a => a.SubComments)
             .FirstOrDefaultAsync(a => a.ArticleId.Equals(id));
     }
-
+    
+    
     public async Task<List<Article?>> GetAllArticlesAsync()
     {
-        return await _context.Articles.ToListAsync();
+        return await _context.Articles
+            .ToListAsync();
     }
     
-    public async Task<List<Article?>> GetAllArticlesAsync(string topic)
+    public async Task<IndexViewModel> GetAllArticlesAsync(string topic, int pageNumber)
     {
-        return await _context.Articles.Where(a => a.Topics.ToLower().Contains(topic.ToLower())).ToListAsync();
+        Func<Article, bool> InCategory = (article) => { return article.Topics.ToLower().Equals(topic.ToLower()); };
+        
+        var pageSize = 1;
+        var skipAmount = pageSize * (pageNumber - 1);
+
+        var query = _context.Articles
+            .Skip(skipAmount)
+            .Take(pageSize);
+
+        if (!string.IsNullOrEmpty(topic))
+            query = query.Where(x => InCategory(x));
+        
+        var articleCount = _context.Articles.Count();
+
+        var pageCount = (int) Math.Ceiling((double) articleCount / pageSize);
+
+        return new IndexViewModel
+        {
+            PageNumber = pageNumber,
+            NextPage = articleCount >  skipAmount + pageSize,
+            Articles = query.ToList(),
+            Topic = topic,
+            PageCount = pageCount,
+            Pages = PageNumbers(pageNumber, pageCount)
+        };
+    }
+
+    private IEnumerable<int> PageNumbers(int pageNumber, int pageCount)
+    {
+        int midPoint = pageNumber < 3 ? 3
+            : pageNumber > pageCount - 2 ? pageCount - 2
+            : pageNumber;
+
+        int lower = midPoint - 2;
+        int upper = midPoint + 2;
+        
+        if (lower != 1)
+        {
+            yield return 1;
+            if (lower - 1 > 1)
+            {
+                yield return -1;
+            }
+        }
+        
+        for (int i = midPoint - 2; i <= midPoint + 2; i++)
+        {
+            yield return i;
+        }
+
+        if (upper != pageCount)
+        {
+            if (pageCount - upper > 1)
+            {
+                yield return -1;
+            }
+            yield return pageCount;
+        }
     }
 
     public void AddArticle(Article? article)
