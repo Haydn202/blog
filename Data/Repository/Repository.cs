@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using blog.Helpers;
 using blog.Models;
 using blog.Models.Comments;
 using blog.ViewModels;
@@ -37,7 +38,7 @@ public class Repository : IRepository
     {
         Func<Article, bool> InCategory = (article) => { return article.Topics.ToLower().Equals(topic.ToLower()); };
         
-        var pageSize = 1;
+        const int pageSize = 25;
         var skipAmount = pageSize * (pageNumber - 1);
 
         var query = _context.Articles
@@ -58,41 +59,8 @@ public class Repository : IRepository
             Articles = query.ToList(),
             Topic = topic,
             PageCount = pageCount,
-            Pages = PageNumbers(pageNumber, pageCount)
+            Pages = PageHelper.PageNumbers(pageNumber, pageCount).ToList()
         };
-    }
-
-    private IEnumerable<int> PageNumbers(int pageNumber, int pageCount)
-    {
-        int midPoint = pageNumber < 3 ? 3
-            : pageNumber > pageCount - 2 ? pageCount - 2
-            : pageNumber;
-
-        int lower = midPoint - 2;
-        int upper = midPoint + 2;
-        
-        if (lower != 1)
-        {
-            yield return 1;
-            if (lower - 1 > 1)
-            {
-                yield return -1;
-            }
-        }
-        
-        for (int i = midPoint - 2; i <= midPoint + 2; i++)
-        {
-            yield return i;
-        }
-
-        if (upper != pageCount)
-        {
-            if (pageCount - upper > 1)
-            {
-                yield return -1;
-            }
-            yield return pageCount;
-        }
     }
 
     public void AddArticle(Article? article)
